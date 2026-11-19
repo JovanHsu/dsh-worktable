@@ -90,7 +90,12 @@ type ViewState = {
   consoleBgGlowGrid?: number
   /** 流光移动速度（0-100，默认 50 = 原速×1；0 = 完全不动；100 = 2× 快）*/
   consoleGlowSpeed?: number
+  /** 控制室「页面入口」卡片：点开 = 内嵌页面（本地 .html 走站内目录托管，http(s) 直连） */
+  consolePages?: ConsolePageEntry[]
 }
+
+/** 控制室页面入口（本地快捷入口；name = 卡片标题，path = 本地 html 绝对路径或 http(s) URL） */
+export type ConsolePageEntry = { id: string; name: string; path: string }
 
 /** 卡片上报的项目元信息（协议 v2）。 */
 export type ProjectMeta = { id: string; name: string; icon?: string }
@@ -340,6 +345,11 @@ function loadView(): ViewState {
       consoleBgPlainGrid: typeof p.consoleBgPlainGrid === 'number' && p.consoleBgPlainGrid >= 0 && p.consoleBgPlainGrid <= 30 ? Math.round(p.consoleBgPlainGrid) : undefined,
       consoleBgGlowGrid: typeof p.consoleBgGlowGrid === 'number' && p.consoleBgGlowGrid >= 0 && p.consoleBgGlowGrid <= 30 ? Math.round(p.consoleBgGlowGrid) : undefined,
       consoleGlowSpeed: typeof p.consoleGlowSpeed === 'number' && p.consoleGlowSpeed >= 0 && p.consoleGlowSpeed <= 100 ? Math.round(p.consoleGlowSpeed) : undefined,
+      consolePages: Array.isArray(p.consolePages)
+        ? p.consolePages
+            .filter((x: any) => x && typeof x.id === 'string' && typeof x.path === 'string' && x.path.trim() !== '')
+            .map((x: any) => ({ id: x.id, name: typeof x.name === 'string' && x.name ? x.name : x.path.split('/').filter(Boolean).pop() || x.path, path: x.path }))
+        : undefined,
       consoleBgPhotoHsls: (() => {
         const src = p.consoleBgPhotoHsls
         if (!src || typeof src !== 'object') return undefined
@@ -530,6 +540,8 @@ async function ensureSessionModel(sessionId: string): Promise<void> {
 
 /** 控制室（工作台自己）项目：固定 id、固定排项目列表第一位、不可删除 */
 const CONSOLE_ID = 'wt-console'
+/** 控制室页面入口卡片 id 前缀（卡片点击按前缀分流到页面窗格） */
+const PAGE_CARD_PREFIX = 'page:'
 const CONSOLE_ICON = '🖥️'
 
 /** 控制室布局是否健全：主窗格首格存在 console 类型标签（旧版关标签的坏存档没有它） */
@@ -1160,6 +1172,8 @@ function WorktableSection(props: any) {
   )
   /** 控制室动作引用（每渲染同步，供 env 闭包读取） */
   const actionsRef = useRef<{ openSplit: (spec: LayoutSpec) => void; openConsole: (explicitBound?: string | null) => void } | null>(null)
+  /** 页面入口打开动作（env 闭包读取；每渲染同步） */
+  const pageRef = useRef<((entry: ConsolePageEntry) => void) | null>(null)
   /** 提醒确认动作引用（每渲染同步；env 闭包用） */
   const ackRef = useRef<((projectId: string) => void) | null>(null)
   /** 视图状态最新快照（供 env 闭包读取控制室主题） */
@@ -1219,6 +1233,22 @@ function WorktableSection(props: any) {
       const name = pr.projects.nameOverrides[id] ?? meta?.name ?? layout?.title ?? id
       const icon = meta?.icon ?? layout?.icon ?? '🧱'
       cards.push(make(id, name, icon, false))
+    }
+    // 页面入口：不绑会话，点开 = 内嵌页面窗格（preview 显示路径，便于一眼认出指向哪个文件）
+    for (const pg of (viewRef.current.consolePages ?? [])) {
+      cards.push({
+        id: PAGE_CARD_PREFIX + pg.id,
+        name: pg.name || basenameOf(pg.path) || pg.path,
+        icon: '🌐',
+        status: 'idle',
+        runtimeMs: null,
+        kids: 0,
+        preview: pg.path,
+        bound: false,
+        self: false,
+        glow: false,
+        pagePath: pg.path,
+      })
     }
     return cards
   }
@@ -1350,8 +1380,33 @@ function WorktableSection(props: any) {
           sweepPreviews()
         },
         onAdd: () => openAddPanel(),
+        getPages: () => viewRef.current.consolePages ?? [],
+        addPage: (name: string, path: string) => {
+          const p2 = String(path || '').trim()
+          if (!p2) return
+          const entry: ConsolePageEntry = {
+            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+            name: String(name || '').trim() || basenameOf(p2),
+            path: p2,
+          }
+          persistView({ consolePages: [...(viewRef.current.consolePages ?? []), entry] })
+          notifyConsole()
+        },
+        removePage: (id: string) => {
+          persistView({ consolePages: (viewRef.current.consolePages ?? []).filter((p2) => p2.id !== id) })
+          notifyConsole()
+        },
+        openPage: (id: string) => {
+          const e = (viewRef.current.consolePages ?? []).find((p2) => p2.id === id)
+          if (e) pageRef.current?.(e)
+        },
         onOpen: (id) => {
           if (id === CONSOLE_ID) return
+          if (id.indexOf(PAGE_CARD_PREFIX) === 0) {
+            const e = (viewRef.current.consolePages ?? []).find((p2) => PAGE_CARD_PREFIX + p2.id === id)
+            if (e) pageRef.current?.(e)
+            return
+          }
           const pr = projectsRef.current.projects
           const layout = pr.layouts.find((l) => l.id === id)
           const view = pr.views[id]
@@ -1643,6 +1698,25 @@ function buildCustomLayoutPrompt(req: string): string {
       try { sweepPreviews() } catch {}
     }
   }, [projects.views, t])
+
+  /** 打开控制室页面入口：本地 .html → 目录级静态托管（相对资源同目录解析）；http(s) → 直连 */
+  const openPageEntry = useCallback((entry: ConsolePageEntry) => {
+    const raw = String(entry?.path ?? '').trim()
+    if (!raw) return
+    const url = /^https?:\/\//i.test(raw)
+      ? raw
+      : '/api/worktable/site/' + encodeURIComponent(parentPathOf(raw)) + '/' + encodeURIComponent(basenameOf(raw))
+    const title = entry.name || basenameOf(raw) || raw
+    openSplit({
+      id: PAGE_CARD_PREFIX + entry.id,
+      title,
+      icon: '🌐',
+      top: null,
+      main: [{ id: 'page-main', title, min: 240, tabs: [{ id: 'page-tab', title, content: { kind: 'iframe', url, title } }], active: 0 }],
+      chatWidth: { default: 320, min: 240, max: 640 },
+    })
+  }, [openSplit])
+  pageRef.current = openPageEntry
 
   /** 控制室卡片点击：已绑定 → 打开控制室；未绑定 → 强制绑定弹窗 */
   const clickConsoleCard = (anchor: HTMLElement) => {

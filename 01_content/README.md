@@ -2,16 +2,17 @@
 
 > DeepSeek Harness 侧边栏的 agent 级项目容器（应用抽屉）。纯增量插件，不替换、不禁用任何官方插件。
 
-## 本分支：DSH 0.1.5-rc.2 兼容分支（0.5.2）
+## 本分支：DSH 0.1.5-rc.2 兼容分支（0.5.3）
 
-上游基线是 [Aisland-SJL/dsh-worktable](https://github.com/Aisland-SJL/dsh-worktable) v0.5.1（声明支持 DSH 0.2.0-rc.2 / 0.2.1-rc.3 / 0.2.1-rc.5）。本分支把它回接到 **DSH 0.1.5-rc.2** 的宿主契约，版本号 0.5.2，兼容声明只写 `0.1.5-rc.2`。
+上游基线是 [Aisland-SJL/dsh-worktable](https://github.com/Aisland-SJL/dsh-worktable) v0.5.1（声明支持 DSH 0.2.0-rc.2 / 0.2.1-rc.3 / 0.2.1-rc.5）。本分支把它回接到 **DSH 0.1.5-rc.2** 的宿主契约，版本号 0.5.3，兼容声明只写 `0.1.5-rc.2`。
 
-改动只有四处，不新增功能：
+兼容回接改动四处，另新增一项功能（控制室页面入口）：
 
 1. **接口鉴权（`src/requestAuth.ts`）**：0.1.5 的 `ctx.connection` 没有 `admit()`/peer 模型。新增分支：在没有 `admit` 时调用宿主自己的 `connection.requestRejection({ headers })`，即宿主 `/api` 同款 Host/Origin + 浏览器 token 校验；401/403 拒绝，`undefined` 放行，其余或服务缺失仍返回 503。有 `admit` 的 0.2 宿主不受影响（优先走 `admit`）。
 2. **控制室摘要（`src/client/sessionDetails.ts`）**：0.1.x 没有 `sessions.using` 临时持有，也没有 `face.history()`。改为优先读该会话 binding 的 `eventSource` 事件窗口（新旧宿主都有），取不到再回退原路径。
-3. **声明（`package.json` / `dsh.plugin.json`）**：`engines.dsh`、`dsh.compatibility`、`dshReleases` 与版本号统一到 0.5.2 / `0.1.5-rc.2`。
+3. **声明（`package.json` / `dsh.plugin.json`）**：`engines.dsh`、`dsh.compatibility`、`dshReleases` 与版本号统一到 0.5.3 / `0.1.5-rc.2`。
 4. **测试夹具（`04_test/*`）**：两处 macOS 平台修正（`/var` → `/private/var` 真实路径断言、目录符号链接递归删除），以及新增「0.1.x 同步 fence」用例；`npm run test:security` 23 项全绿。
+5. **控制室页面入口（新功能）**：控制室底部工具栏新增「页面入口」按钮，填名称 + 本地 `.html` 绝对路径或 `https://` 网址即生成一张卡片；点卡片在窗格内打开页面（本地文件走目录级静态托管，相对资源按同目录解析）。入口列表随视图存档持久化（`dsh.worktable.view.v1` 的 `consolePages`），可在同一菜单内删除。
 
 ### 已验证范围（macOS + dsh web 0.1.5-rc.2，隔离 `DSH_HOME`）
 

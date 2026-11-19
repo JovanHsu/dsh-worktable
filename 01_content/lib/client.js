@@ -8231,6 +8231,18 @@ var css = xterm_default + "\n" + [
   ".dsh-wt_dropGear{flex:none;width:24px;height:24px;margin-right:2px;padding:0;border:none;border-radius:6px;background:transparent;color:var(--wt-text2);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .15s ease,color .15s ease}",
   ".dsh-wt_dropGear:hover{background:var(--wt-chip);color:var(--wt-text)}",
   ".dsh-wt_dropWide{width:264px}",
+  ".dsh-wt_pageHead{padding:4px 8px 3px;color:var(--wt-text2);font-size:11px;line-height:15px;letter-spacing:.02em}",
+  ".dsh-wt_pageEmpty{padding:2px 8px 6px;color:var(--wt-text2);font-size:11px;line-height:15px;opacity:.75}",
+  ".dsh-wt_pageName{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}",
+  ".dsh-wt_pageForm{display:flex;flex-direction:column;gap:5px;margin-top:3px;padding:6px 3px 2px;border-top:1px solid rgba(255,255,255,.14)}",
+  ".dsh-wt_console[data-wt-theme=light] .dsh-wt_pageForm{border-top-color:rgba(27,31,36,.14)}",
+  ".dsh-wt_pageInput{width:100%;box-sizing:border-box;padding:5px 8px;border:1px solid rgba(255,255,255,.18);border-radius:7px;background:rgba(255,255,255,.06);color:var(--wt-text);font:inherit;font-size:12px;line-height:17px;outline:none}",
+  ".dsh-wt_pageInput::placeholder{color:var(--wt-text2);opacity:.6}",
+  ".dsh-wt_pageInput:focus{border-color:rgba(120,170,255,.55)}",
+  ".dsh-wt_console[data-wt-theme=light] .dsh-wt_pageInput{border-color:rgba(27,31,36,.18);background:rgba(255,255,255,.7)}",
+  ".dsh-wt_pageSave{padding:5px 9px;border:none;border-radius:7px;background:rgba(120,170,255,.20);color:var(--wt-text);font:inherit;font-size:12px;line-height:17px;cursor:pointer}",
+  ".dsh-wt_pageSave:hover{background:rgba(120,170,255,.32)}",
+  ".dsh-wt_consoleCardPage .dsh-wt_consolePreview{font-size:10px;opacity:.7}",
   ".dsh-wt_dropTrash{flex:none;width:22px;height:22px;margin-right:2px;padding:0;border:none;border-radius:6px;background:transparent;color:var(--wt-text3);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:background .15s ease,color .15s ease}",
   ".dsh-wt_dragHandle{flex:none;width:18px;height:22px;padding:0;border:none;border-radius:6px;background:transparent;color:var(--wt-text3);cursor:grab;display:inline-flex;align-items:center;justify-content:center;transition:background .15s ease,color .15s ease;touch-action:none}",
   ".dsh-wt_dragHandle:hover{background:var(--wt-chip);color:var(--wt-text2)}",
@@ -8578,6 +8590,13 @@ var zh = {
   "console.bindFail": "\u521B\u5EFA\u5931\u8D25\uFF0C\u8BF7\u91CD\u8BD5",
   "console.noSessions": "\u6CA1\u6709\u53EF\u7528\u5BF9\u8BDD",
   "console.addProject": "\u6DFB\u52A0\u9879\u76EE",
+  "console.pagesLabel": "\u9875\u9762\u5165\u53E3",
+  "console.pagesTitle": "\u9875\u9762\u5165\u53E3",
+  "console.pagesEmpty": "\u8FD8\u6CA1\u6709\u5165\u53E3\uFF0C\u586B\u4E00\u4E2A\u672C\u5730 .html \u8DEF\u5F84\u6216\u7F51\u5740",
+  "console.pageNamePh": "\u540D\u79F0\uFF08\u53EF\u7559\u7A7A\uFF09",
+  "console.pagePathPh": "\u672C\u5730 .html \u7EDD\u5BF9\u8DEF\u5F84\u6216 https:// \u7F51\u5740",
+  "console.pageAdd": "\u6DFB\u52A0\u5165\u53E3",
+  "console.pageRemove": "\u5220\u9664\u5165\u53E3",
   "pane.wip": "\u5F00\u53D1\u4E2D\uFF08\u540E\u7EED\u7248\u672C\u63A5\u5165\uFF09",
   "pane.explorerNoCwd": "\u5F53\u524D\u4F1A\u8BDD\u6CA1\u6709\u5DE5\u4F5C\u76EE\u5F55",
   "pane.openLater": "\u8BE5\u7C7B\u578B\u6682\u4E0D\u652F\u6301\u9884\u89C8",
@@ -8811,6 +8830,13 @@ var en = {
   "console.bindFail": "Creation failed, try again",
   "console.noSessions": "No sessions available",
   "console.addProject": "Add project",
+  "console.pagesLabel": "Page entry",
+  "console.pagesTitle": "Page entries",
+  "console.pagesEmpty": "No entries yet \u2014 add a local .html path or a URL",
+  "console.pageNamePh": "Name (optional)",
+  "console.pagePathPh": "Absolute path to a local .html, or an https:// URL",
+  "console.pageAdd": "Add entry",
+  "console.pageRemove": "Remove entry",
   "pane.wip": "Coming in a later version",
   "pane.explorerNoCwd": "No working directory for the current session",
   "pane.openLater": "Preview not supported for this type",
@@ -9020,7 +9046,19 @@ function SandboxedFrame(props) {
 }
 
 // src/client/changelog.ts
-var CHANGELOG_V030 = `\u66F4\u65B0\u516C\u544A \xB7 v0.5.1
+var CHANGELOG_V030 = `\u66F4\u65B0\u516C\u544A \xB7 v0.5.3
+
+\u{1FA9F} \u63A7\u5236\u5BA4\u9875\u9762\u5165\u53E3
+
+\u3010\u9875\u9762\u5165\u53E3\u3011\u63A7\u5236\u5BA4\u5E95\u90E8\u5DE5\u5177\u680F\u65B0\u589E\u300C\u9875\u9762\u5165\u53E3\u300D\uFF1A\u586B\u540D\u79F0 + \u672C\u5730 .html \u7EDD\u5BF9\u8DEF\u5F84\u6216 https:// \u7F51\u5740\uFF0C\u5373\u751F\u6210\u4E00\u5F20\u5361\u7247\uFF1B\u70B9\u5361\u7247\u5728\u7A97\u683C\u5185\u6253\u5F00\u9875\u9762\u3002\u672C\u5730\u6587\u4EF6\u8D70\u7AD9\u5185\u76EE\u5F55\u7EA7\u9759\u6001\u6258\u7BA1\uFF0C\u9875\u9762\u5185\u7684\u76F8\u5BF9\u8D44\u6E90\u6309\u540C\u76EE\u5F55\u89E3\u6790\uFF1B\u7F51\u9875\u6C99\u7BB1\u9694\u79BB\u4E0D\u53D8\uFF08\u4ECD\u65E0\u540C\u6E90\u6743\u9650\uFF09\u3002
+
+\u3010\u6301\u4E45\u5316\u4E0E\u589E\u5220\u3011\u5165\u53E3\u5217\u8868\u968F\u89C6\u56FE\u5B58\u6863\u4FDD\u5B58\uFF08dsh.worktable.view.v1 \u7684 consolePages\uFF09\uFF0C\u5237\u65B0\u4E0E\u91CD\u542F\u540E\u4ECD\u5728\uFF1B\u540C\u4E00\u83DC\u5355\u91CC\u53EF\u9010\u4E2A\u5220\u9664\u3002
+
+\u3010\u517C\u5BB9\u4E0E\u9A8C\u6536\u3011\u4EC5\u5217\u5DF2\u6D4B DSH 0.1.5-rc.2\uFF08macOS \u7F51\u9875\u7AEF\uFF09\u3002\u9694\u79BB DSH_HOME + \u771F\u5B9E Chromium \u9A8C\u8BC1\uFF1A\u6DFB\u52A0 \u2192 \u5361\u7247\u51FA\u73B0 \u2192 \u5E72\u51C0\u91CD\u542F\u540E\u4ECD\u5728 \u2192 \u70B9\u5F00\u5728\u7A97\u683C\u5185\u6E32\u67D3 \u2192 \u5220\u9664\u540E\u6D88\u5931\uFF1B\u56DE\u5F52 test:gate 10\u3001security 23\u3001session 22\u3001details 34\u3001update 11\u3001input 15\u3001transport 9\u3001widget 26 \u5168\u7EFF\u3002
+
+\u2500\u2500\u2500\u2500\u2500\u2500\u2500
+
+\u6B64\u524D\u7248\u672C\u8BF4\u660E\uFF08v0.5.1\uFF09
 
 \u{1F527} DSH 0.2.1-rc.5 \u517C\u5BB9\u4E0E\u66F4\u65B0\u63D0\u9192\u4FEE\u590D
 
@@ -9160,7 +9198,7 @@ var CHANGELOG_V030 = `\u66F4\u65B0\u516C\u544A \xB7 v0.5.1
 \u30103.1 \u6587\u5B57\u4E0E\u7EC6\u8282\u6253\u78E8\u3011\u5168\u5C40\u5B57\u4F53\u4E0E\u5B57\u53F7\u7EDF\u4E00\u4F18\u5316\u3001\u4E0B\u62C9\u9762\u677F\u73BB\u7483\u5316\u4E0E\u5BF9\u9F50\u3001\u83DC\u5355\u70B9\u9009\u540E\u4FDD\u6301\u6253\u5F00\u4FBF\u4E8E\u8FDE\u7EED\u9884\u89C8\u3001\u6309\u94AE\u63CF\u8FB9\u4E0E\u60AC\u505C\u53CD\u9988\u7B49\u4EA4\u4E92\u7EC6\u8282\uFF1B\u540C\u65F6\u4FEE\u590D\u4E86\u591A\u9879\u4F53\u9A8C\u95EE\u9898\uFF08\u7167\u7247\u4E0A\u4F20\u6E05\u6670\u5EA6\u3001\u80CC\u666F\u7F51\u683C\u7EBF\u5728\u7167\u7247\u6A21\u5F0F\u4E0B\u4E0D\u751F\u6548\u3001\u6D45\u8272\u4E3B\u9898\u4E0B\u5DE5\u4F5C\u72B6\u6001\u5149\u6548\u4E0D\u53EF\u89C1\u7B49\uFF09\u3002`;
 
 // src/client/updateCheck.ts
-var LOCAL_VERSION = false ? "dev" : "0.5.2";
+var LOCAL_VERSION = false ? "dev" : "0.5.3";
 var UPDATE_REPO = "JovanHsu/dsh-worktable";
 var K_UPDATE_CHECK = "dsh.worktable.updateCheck.v1";
 var K_LAST_CHECK = "dsh.worktable.lastUpdateCheck.v1";
@@ -18450,6 +18488,9 @@ function ConsolePane() {
   const updBusyRef = (0, import_react2.useRef)(false);
   const photoUrlRef = (0, import_react2.useRef)("");
   const [openMenu, setOpenMenu] = (0, import_react2.useState)(null);
+  const [pages, setPages] = (0, import_react2.useState)(() => splitEnv?.console?.getPages?.() ?? []);
+  const [pageName, setPageName] = (0, import_react2.useState)("");
+  const [pagePathDraft, setPagePathDraft] = (0, import_react2.useState)("");
   const [bgEdit, setBgEdit] = (0, import_react2.useState)(null);
   const [plainHsl, setPlainHslState] = (0, import_react2.useState)(() => {
     const saved = splitEnv?.console?.getPlainHsl?.();
@@ -18460,6 +18501,20 @@ function ConsolePane() {
   const [photoHsl, setPhotoHslState] = (0, import_react2.useState)({ h: 0, s: 100, l: 100 });
   const gridRef = (0, import_react2.useRef)(null);
   const firstRectsRef = (0, import_react2.useRef)(null);
+  const syncPages = () => setPages(splitEnv?.console?.getPages?.() ?? []);
+  const commitPage = () => {
+    const path = pagePathDraft.trim();
+    if (!path) return;
+    const name = pageName.trim() || path.split("/").filter(Boolean).pop() || "\u9875\u9762";
+    splitEnv?.console?.addPage?.(name, path);
+    syncPages();
+    setPageName("");
+    setPagePathDraft("");
+  };
+  const dropPage = (id) => {
+    splitEnv?.console?.removePage?.(id);
+    syncPages();
+  };
   const onCols = (n) => {
     const grid = gridRef.current;
     if (grid) {
@@ -18956,7 +19011,7 @@ function ConsolePane() {
           "data-flip": c.id,
           role: c.self ? void 0 : "button",
           tabIndex: c.self ? -1 : 0,
-          className: "dsh-wt_consoleCard" + (c.self ? " dsh-wt_consoleCardSelf" : "") + (c.status === "busy" ? " dsh-wt_consoleCard-busy" : "") + (c.glow && c.status === "done" ? " dsh-wt_consoleCard-glowDone" : "") + (c.glow && c.status === "need" ? " dsh-wt_consoleCard-glowNeed" : ""),
+          className: "dsh-wt_consoleCard" + (c.self ? " dsh-wt_consoleCardSelf" : "") + (c.status === "busy" ? " dsh-wt_consoleCard-busy" : "") + (c.glow && c.status === "done" ? " dsh-wt_consoleCard-glowDone" : "") + (c.glow && c.status === "need" ? " dsh-wt_consoleCard-glowNeed" : "") + (c.pagePath ? " dsh-wt_consoleCardPage" : ""),
           title: c.name,
           onClick: () => {
             if (c.self || !env) return;
@@ -19015,6 +19070,15 @@ function ConsolePane() {
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("rect", { x: "6.65", y: "3.4", width: "2.7", height: "9.2", rx: "0.9", fill: "none", stroke: "currentColor", strokeWidth: "0.9" }),
           /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("rect", { x: "11.1", y: "3.4", width: "2.7", height: "9.2", rx: "0.9", fill: "none", stroke: "currentColor", strokeWidth: "0.9" })
         ] }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { type: "button", className: "dsh-wt_dockBtn" + (openMenu === "pages" ? " dsh-wt_dockBtnOn" : ""), title: T("console.pagesLabel"), "aria-label": T("console.pagesLabel"), onClick: () => {
+          const next = openMenu === "pages" ? null : "pages";
+          setOpenMenu(next);
+          if (next) syncPages();
+        }, children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("svg", { width: "18", height: "18", viewBox: "0 0 16 16", "aria-hidden": true, children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("rect", { x: "2.2", y: "3.4", width: "11.6", height: "9.2", rx: "1.6", fill: "none", stroke: "currentColor", strokeWidth: "0.9" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M6.2 3.4v9.2", fill: "none", stroke: "currentColor", strokeWidth: "0.9" }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M9.2 7.2h2.8M10.6 5.8v2.8", fill: "none", stroke: "currentColor", strokeWidth: "0.9", strokeLinecap: "round" })
+        ] }) }),
         /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("button", { type: "button", className: "dsh-wt_dockBtn" + (annOpen ? " dsh-wt_dockBtnOn" : ""), title: T("annot.updateTitle"), "aria-label": T("annot.updateTitle"), onClick: () => {
           setOpenMenu(null);
           setAnnOpen((v) => !v);
@@ -19024,6 +19088,27 @@ function ConsolePane() {
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("path", { d: "M6.2 12.9c.3.7 1 1.2 1.8 1.2s1.5-.5 1.8-1.2", fill: "none", stroke: "currentColor", strokeWidth: "0.9", strokeLinecap: "round" })
           ] }),
           updInfo && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "dsh-wt_dockBadge", "aria-hidden": true })
+        ] })
+      ] }),
+      openMenu === "pages" && /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "dsh-wt_drop dsh-wt_dropWide", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "dsh-wt_pageHead", children: T("console.pagesTitle") }),
+        pages.length === 0 && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "dsh-wt_pageEmpty", children: T("console.pagesEmpty") }),
+        pages.map((pg) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "dsh-wt_dropRow", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("button", { type: "button", className: "dsh-wt_dropItem", title: pg.path, onClick: () => {
+            splitEnv?.console?.openPage?.(pg.id);
+            setOpenMenu(null);
+          }, children: [
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { "aria-hidden": true, children: "\u{1F310}" }),
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("span", { className: "dsh-wt_pageName", children: pg.name || pg.path })
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { type: "button", className: "dsh-wt_dropGear", title: T("console.pageRemove"), "aria-label": T("console.pageRemove"), onClick: () => dropPage(pg.id), children: "\xD7" })
+        ] }, pg.id)),
+        /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", { className: "dsh-wt_pageForm", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { className: "dsh-wt_pageInput", value: pageName, placeholder: T("console.pageNamePh"), onChange: (e) => setPageName(e.target.value) }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("input", { className: "dsh-wt_pageInput", value: pagePathDraft, placeholder: T("console.pagePathPh"), onChange: (e) => setPagePathDraft(e.target.value), onKeyDown: (e) => {
+            if (e.key === "Enter") commitPage();
+          } }),
+          /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("button", { type: "button", className: "dsh-wt_pageSave", onClick: commitPage, children: T("console.pageAdd") })
         ] })
       ] }),
       openMenu === "theme" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", { className: "dsh-wt_drop", children: themeOpts.map((o) => /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("button", { type: "button", className: "dsh-wt_dropItem" + (themeMode === o.mode ? " dsh-wt_dropItemOn" : ""), onClick: () => setTheme(o.mode), children: [
@@ -20960,6 +21045,7 @@ function loadView() {
       consoleBgPlainGrid: typeof p.consoleBgPlainGrid === "number" && p.consoleBgPlainGrid >= 0 && p.consoleBgPlainGrid <= 30 ? Math.round(p.consoleBgPlainGrid) : void 0,
       consoleBgGlowGrid: typeof p.consoleBgGlowGrid === "number" && p.consoleBgGlowGrid >= 0 && p.consoleBgGlowGrid <= 30 ? Math.round(p.consoleBgGlowGrid) : void 0,
       consoleGlowSpeed: typeof p.consoleGlowSpeed === "number" && p.consoleGlowSpeed >= 0 && p.consoleGlowSpeed <= 100 ? Math.round(p.consoleGlowSpeed) : void 0,
+      consolePages: Array.isArray(p.consolePages) ? p.consolePages.filter((x) => x && typeof x.id === "string" && typeof x.path === "string" && x.path.trim() !== "").map((x) => ({ id: x.id, name: typeof x.name === "string" && x.name ? x.name : x.path.split("/").filter(Boolean).pop() || x.path, path: x.path })) : void 0,
       consoleBgPhotoHsls: (() => {
         const src = p.consoleBgPhotoHsls;
         if (!src || typeof src !== "object") return void 0;
@@ -21131,6 +21217,7 @@ async function ensureSessionModel(sessionId) {
   }
 }
 var CONSOLE_ID = "wt-console";
+var PAGE_CARD_PREFIX = "page:";
 var CONSOLE_ICON = "\u{1F5A5}\uFE0F";
 function specHasConsoleTab(spec) {
   return !!spec?.main?.[0]?.tabs?.some((t) => t.content?.kind === "builtin" && t.content.type === "console");
@@ -21744,6 +21831,7 @@ function WorktableSection(props) {
     { projects, metas, aliveRegisteredIds: registeredIds }
   );
   const actionsRef = (0, import_react3.useRef)(null);
+  const pageRef = (0, import_react3.useRef)(null);
   const ackRef = (0, import_react3.useRef)(null);
   const viewRef = (0, import_react3.useRef)(view);
   viewRef.current = view;
@@ -21800,6 +21888,21 @@ function WorktableSection(props) {
       const name = pr.projects.nameOverrides[id] ?? meta?.name ?? layout?.title ?? id;
       const icon = meta?.icon ?? layout?.icon ?? "\u{1F9F1}";
       cards.push(make(id, name, icon, false));
+    }
+    for (const pg of viewRef.current.consolePages ?? []) {
+      cards.push({
+        id: PAGE_CARD_PREFIX + pg.id,
+        name: pg.name || basenameOf(pg.path) || pg.path,
+        icon: "\u{1F310}",
+        status: "idle",
+        runtimeMs: null,
+        kids: 0,
+        preview: pg.path,
+        bound: false,
+        self: false,
+        glow: false,
+        pagePath: pg.path
+      });
     }
     return cards;
   };
@@ -21946,8 +22049,33 @@ function WorktableSection(props) {
           sweepPreviews();
         },
         onAdd: () => openAddPanel(),
+        getPages: () => viewRef.current.consolePages ?? [],
+        addPage: (name, path) => {
+          const p2 = String(path || "").trim();
+          if (!p2) return;
+          const entry = {
+            id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+            name: String(name || "").trim() || basenameOf(p2),
+            path: p2
+          };
+          persistView({ consolePages: [...viewRef.current.consolePages ?? [], entry] });
+          notifyConsole();
+        },
+        removePage: (id) => {
+          persistView({ consolePages: (viewRef.current.consolePages ?? []).filter((p2) => p2.id !== id) });
+          notifyConsole();
+        },
+        openPage: (id) => {
+          const e = (viewRef.current.consolePages ?? []).find((p2) => p2.id === id);
+          if (e) pageRef.current?.(e);
+        },
         onOpen: (id) => {
           if (id === CONSOLE_ID) return;
+          if (id.indexOf(PAGE_CARD_PREFIX) === 0) {
+            const e = (viewRef.current.consolePages ?? []).find((p2) => PAGE_CARD_PREFIX + p2.id === id);
+            if (e) pageRef.current?.(e);
+            return;
+          }
           const pr = projectsRef.current.projects;
           const layout = pr.layouts.find((l) => l.id === id);
           const view2 = pr.views[id];
@@ -22247,6 +22375,21 @@ function WorktableSection(props) {
       }
     }
   }, [projects.views, t]);
+  const openPageEntry = (0, import_react3.useCallback)((entry) => {
+    const raw = String(entry?.path ?? "").trim();
+    if (!raw) return;
+    const url = /^https?:\/\//i.test(raw) ? raw : "/api/worktable/site/" + encodeURIComponent(parentPathOf(raw)) + "/" + encodeURIComponent(basenameOf(raw));
+    const title = entry.name || basenameOf(raw) || raw;
+    openSplit({
+      id: PAGE_CARD_PREFIX + entry.id,
+      title,
+      icon: "\u{1F310}",
+      top: null,
+      main: [{ id: "page-main", title, min: 240, tabs: [{ id: "page-tab", title, content: { kind: "iframe", url, title } }], active: 0 }],
+      chatWidth: { default: 320, min: 240, max: 640 }
+    });
+  }, [openSplit]);
+  pageRef.current = openPageEntry;
   const clickConsoleCard = (anchor) => {
     if (projectsRef.current.projects.bindings[CONSOLE_ID]) {
       openConsole();

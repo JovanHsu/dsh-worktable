@@ -221,6 +221,8 @@ export type ConsoleCardData = {
   self: boolean
   /** 本轮结束/待决且未被确认：卡片发提醒光（点击确认后熄灭） */
   glow: boolean
+  /** 页面入口卡片的本地路径 / URL（仅页面入口卡存在） */
+  pagePath?: string
 }
 
 type SplitEnv = {
@@ -248,6 +250,11 @@ type SplitEnv = {
     refreshPreviews: () => void
     /** 创建卡片：打开「添加项目」流程（同侧栏 ＋） */
     onAdd: () => void
+    /** 页面入口：列表 / 新增 / 删除 / 打开（点卡片 = 内嵌页面窗格） */
+    getPages: () => { id: string; name: string; path: string }[]
+    addPage: (name: string, path: string) => void
+    removePage: (id: string) => void
+    openPage: (id: string) => void
     getTheme: () => 'dark' | 'light' | 'system'
     setTheme: (th: 'dark' | 'light' | 'system') => void
     getCols: () => number
@@ -1635,6 +1642,9 @@ function ConsolePane() {
   const updBusyRef = useRef(false)
   const photoUrlRef = useRef<string>('')
   const [openMenu, setOpenMenu] = useState<string | null>(null)
+  const [pages, setPages] = useState<{ id: string; name: string; path: string }[]>(() => splitEnv?.console?.getPages?.() ?? [])
+  const [pageName, setPageName] = useState('')
+  const [pagePathDraft, setPagePathDraft] = useState('')
   const [bgEdit, setBgEdit] = useState<'plain' | 'glow' | 'photo' | null>(null)
   const [plainHsl, setPlainHslState] = useState<{ h: number; s: number; l: number }>(() => {
     const saved = splitEnv?.console?.getPlainHsl?.()
@@ -1645,6 +1655,22 @@ function ConsolePane() {
   const [photoHsl, setPhotoHslState] = useState<{ h: number; s: number; l: number }>({ h: 0, s: 100, l: 100 })
   const gridRef = useRef<HTMLDivElement | null>(null)
   const firstRectsRef = useRef<Map<string, { x: number; y: number }> | null>(null)
+  /** 页面入口：刷新列表（env 是只读镜像，写完重读一次） */
+  const syncPages = () => setPages(splitEnv?.console?.getPages?.() ?? [])
+  /** 新增页面入口：路径必填；名称留空用文件名兜底 */
+  const commitPage = () => {
+    const path = pagePathDraft.trim()
+    if (!path) return
+    const name = pageName.trim() || path.split('/').filter(Boolean).pop() || '页面'
+    splitEnv?.console?.addPage?.(name, path)
+    syncPages()
+    setPageName('')
+    setPagePathDraft('')
+  }
+  const dropPage = (id: string) => {
+    splitEnv?.console?.removePage?.(id)
+    syncPages()
+  }
   const onCols = (n: number) => {
     const grid = gridRef.current
     if (grid) {
@@ -2057,7 +2083,8 @@ function ConsolePane() {
             className={'dsh-wt_consoleCard' + (c.self ? ' dsh-wt_consoleCardSelf' : '')
               + (c.status === 'busy' ? ' dsh-wt_consoleCard-busy' : '')
               + (c.glow && c.status === 'done' ? ' dsh-wt_consoleCard-glowDone' : '')
-              + (c.glow && c.status === 'need' ? ' dsh-wt_consoleCard-glowNeed' : '')}
+              + (c.glow && c.status === 'need' ? ' dsh-wt_consoleCard-glowNeed' : '')
+              + (c.pagePath ? ' dsh-wt_consoleCardPage' : '')}
             title={c.name}
             onClick={() => {
               if (c.self || !env) return
@@ -2101,8 +2128,28 @@ function ConsolePane() {
           <button type="button" className={'dsh-wt_dockBtn' + (openMenu === 'shape' ? ' dsh-wt_dockBtnOn' : '')} title={T('console.shapeLabel')} aria-label={T('console.shapeLabel')} onClick={() => setOpenMenu(openMenu === 'shape' ? null : 'shape')}><svg width="20" height="20" viewBox="0 0 16 16" aria-hidden><rect x="2.2" y="2.2" width="7" height="7" rx="1.5" fill="none" stroke="currentColor" strokeWidth="0.9" /><circle cx="10.6" cy="10.6" r="3.8" fill="none" stroke="currentColor" strokeWidth="0.9" /></svg></button>
           <button type="button" className={'dsh-wt_dockBtn' + (openMenu === 'bg' ? ' dsh-wt_dockBtnOn' : '')} title={T('console.bgLabel')} aria-label={T('console.bgLabel')} onClick={() => { setOpenMenu(openMenu === 'bg' ? null : 'bg'); setBgEdit(null) }}><svg width="18" height="18" viewBox="0 0 16 16" aria-hidden><rect x="2.2" y="3.2" width="11.6" height="9.6" rx="1.6" fill="none" stroke="currentColor" strokeWidth="0.9" /><circle cx="5.9" cy="6.7" r="1.05" fill="none" stroke="currentColor" strokeWidth="0.8" /><path d="M3.4 11.4l3-3 2.3 2.3 1.9-1.9 3 2.6" fill="none" stroke="currentColor" strokeWidth="0.9" /></svg></button>
           <button type="button" className={'dsh-wt_dockBtn' + (openMenu === 'cols' ? ' dsh-wt_dockBtnOn' : '')} title={T('console.colsLabel')} aria-label={T('console.colsLabel')} onClick={() => setOpenMenu(openMenu === 'cols' ? null : 'cols')}><svg width="20" height="20" viewBox="0 0 16 16" aria-hidden><rect x="2.2" y="3.4" width="2.7" height="9.2" rx="0.9" fill="none" stroke="currentColor" strokeWidth="0.9" /><rect x="6.65" y="3.4" width="2.7" height="9.2" rx="0.9" fill="none" stroke="currentColor" strokeWidth="0.9" /><rect x="11.1" y="3.4" width="2.7" height="9.2" rx="0.9" fill="none" stroke="currentColor" strokeWidth="0.9" /></svg></button>
+          <button type="button" className={'dsh-wt_dockBtn' + (openMenu === 'pages' ? ' dsh-wt_dockBtnOn' : '')} title={T('console.pagesLabel')} aria-label={T('console.pagesLabel')} onClick={() => { const next = openMenu === 'pages' ? null : 'pages'; setOpenMenu(next); if (next) syncPages() }}><svg width="18" height="18" viewBox="0 0 16 16" aria-hidden><rect x="2.2" y="3.4" width="11.6" height="9.2" rx="1.6" fill="none" stroke="currentColor" strokeWidth="0.9" /><path d="M6.2 3.4v9.2" fill="none" stroke="currentColor" strokeWidth="0.9" /><path d="M9.2 7.2h2.8M10.6 5.8v2.8" fill="none" stroke="currentColor" strokeWidth="0.9" strokeLinecap="round" /></svg></button>
           <button type="button" className={'dsh-wt_dockBtn' + (annOpen ? ' dsh-wt_dockBtnOn' : '')} title={T('annot.updateTitle')} aria-label={T('annot.updateTitle')} onClick={() => { setOpenMenu(null); setAnnOpen((v) => !v) }}><svg width="18" height="18" viewBox="0 0 16 16" aria-hidden><path d="M2.6 7c0-2.9 2.4-4.9 5.4-4.9s5.4 2 5.4 4.9v2.9l1.2 1.7H1.4l1.2-1.7z" fill="none" stroke="currentColor" strokeWidth="0.9" strokeLinejoin="round" /><path d="M6.2 12.9c.3.7 1 1.2 1.8 1.2s1.5-.5 1.8-1.2" fill="none" stroke="currentColor" strokeWidth="0.9" strokeLinecap="round" /></svg>{updInfo && <span className="dsh-wt_dockBadge" aria-hidden />}</button>
         </div>
+        {openMenu === 'pages' && (
+          <div className="dsh-wt_drop dsh-wt_dropWide">
+            <div className="dsh-wt_pageHead">{T('console.pagesTitle')}</div>
+            {pages.length === 0 && <div className="dsh-wt_pageEmpty">{T('console.pagesEmpty')}</div>}
+            {pages.map((pg) => (
+              <div key={pg.id} className="dsh-wt_dropRow">
+                <button type="button" className="dsh-wt_dropItem" title={pg.path} onClick={() => { splitEnv?.console?.openPage?.(pg.id); setOpenMenu(null) }}>
+                  <span aria-hidden>🌐</span><span className="dsh-wt_pageName">{pg.name || pg.path}</span>
+                </button>
+                <button type="button" className="dsh-wt_dropGear" title={T('console.pageRemove')} aria-label={T('console.pageRemove')} onClick={() => dropPage(pg.id)}>×</button>
+              </div>
+            ))}
+            <div className="dsh-wt_pageForm">
+              <input className="dsh-wt_pageInput" value={pageName} placeholder={T('console.pageNamePh')} onChange={(e) => setPageName(e.target.value)} />
+              <input className="dsh-wt_pageInput" value={pagePathDraft} placeholder={T('console.pagePathPh')} onChange={(e) => setPagePathDraft(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') commitPage() }} />
+              <button type="button" className="dsh-wt_pageSave" onClick={commitPage}>{T('console.pageAdd')}</button>
+            </div>
+          </div>
+        )}
         {openMenu === 'theme' && (
           <div className="dsh-wt_drop">
             {themeOpts.map((o) => (

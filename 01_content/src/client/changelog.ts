@@ -1,6 +1,18 @@
 /** 更新公告正文；公开发布状态以 GitHub Release 为准。 */
-export const CHANGELOG_VERSION = 'v0.5.1'
-export const CHANGELOG_V030 = `更新公告 · v0.5.1
+export const CHANGELOG_VERSION = 'v0.5.3'
+export const CHANGELOG_V030 = `更新公告 · v0.5.3
+
+🪟 控制室页面入口
+
+【页面入口】控制室底部工具栏新增「页面入口」：填名称 + 本地 .html 绝对路径或 https:// 网址，即生成一张卡片；点卡片在窗格内打开页面。本地文件走站内目录级静态托管，页面内的相对资源按同目录解析；网页沙箱隔离不变（仍无同源权限）。
+
+【持久化与增删】入口列表随视图存档保存（dsh.worktable.view.v1 的 consolePages），刷新与重启后仍在；同一菜单里可逐个删除。
+
+【兼容与验收】仅列已测 DSH 0.1.5-rc.2（macOS 网页端）。隔离 DSH_HOME + 真实 Chromium 验证：添加 → 卡片出现 → 干净重启后仍在 → 点开在窗格内渲染 → 删除后消失；回归 test:gate 10、security 23、session 22、details 34、update 11、input 15、transport 9、widget 26 全绿。
+
+───────
+
+此前版本说明（v0.5.1）
 
 🔧 DSH 0.2.1-rc.5 兼容与更新提醒修复
 

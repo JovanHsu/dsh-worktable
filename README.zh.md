@@ -4,11 +4,13 @@
 
 **DeepSeek Harness 的 agent 项目工作台**——侧边栏「应用抽屉」把每个项目变成可停靠的窗口，再加一个实时监控所有项目的内置「控制室」。
 
-> **这是面向 DSH 0.1.5-rc.2 的兼容分支（0.5.2）**，fork 自 [Aisland-SJL/dsh-worktable](https://github.com/Aisland-SJL/dsh-worktable) v0.5.1。兼容声明只写 `0.1.5-rc.2`，改动与已验证范围见 [包内说明](01_content/README.md#本分支dsh-015-rc2-兼容分支052)。安装：
+> **这是面向 DSH 0.1.5-rc.2 的兼容分支（0.5.3）**，fork 自 [Aisland-SJL/dsh-worktable](https://github.com/Aisland-SJL/dsh-worktable) v0.5.1。兼容声明只写 `0.1.5-rc.2`，改动与已验证范围见 [包内说明](01_content/README.md#本分支dsh-015-rc2-兼容分支053)。安装：
 >
 > ```bash
 > dsh plugin --profile web add "https://github.com/JovanHsu/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
 > ```
+>
+> 本分支另在控制室新增**页面入口**：为本地 `.html` 文件或 `https://` 地址建一张卡片，点开即在窗格内渲染。
 >
 > 下文 0.5.1 的兼容矩阵与验收记录属上游历史，不代表本分支的验证范围。
 

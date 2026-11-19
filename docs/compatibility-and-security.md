@@ -2,7 +2,7 @@
 
 适用源码：0.5.1。公开发布状态以 GitHub Release 为准。本文解释当前代码契约；验证范围与安装命令见 [包内说明](../01_content/README.md)。
 
-> **本仓库是 0.1.5-rc.2 兼容分支（0.5.2）。** 上游 0.5.1 面向 DSH 0.2.0-rc.2 / 0.2.1-rc.3 / 0.2.1-rc.5；本分支把鉴权与摘要读取回接到 0.1.5-rc.2，`engines.dsh` 与兼容矩阵只声明 `0.1.5-rc.2`。下文凡写 0.2 的地方都是上游契约的说明，0.1.5 的实际行为见本节与 [包内说明](../01_content/README.md)「本分支」一节：私有路由鉴权改走宿主的同步 `connection.requestRejection({ headers })`（Host/Origin + 浏览器 token，401/403 拒绝、undefined 放行、其余 503），`admit` 存在时仍优先 `admit`；会话摘要优先读 binding 的 `eventSource` 事件窗口。验证证据仅限 macOS 网页端 0.1.5-rc.2 的隔离数据目录，未做模型任务与 Windows/Desktop 验收。
+> **本仓库是 0.1.5-rc.2 兼容分支（0.5.3）。** 上游 0.5.1 面向 DSH 0.2.0-rc.2 / 0.2.1-rc.3 / 0.2.1-rc.5；本分支把鉴权与摘要读取回接到 0.1.5-rc.2，`engines.dsh` 与兼容矩阵只声明 `0.1.5-rc.2`。下文凡写 0.2 的地方都是上游契约的说明，0.1.5 的实际行为见本节与 [包内说明](../01_content/README.md)「本分支」一节：私有路由鉴权改走宿主的同步 `connection.requestRejection({ headers })`（Host/Origin + 浏览器 token，401/403 拒绝、undefined 放行、其余 503），`admit` 存在时仍优先 `admit`；会话摘要优先读 binding 的 `eventSource` 事件窗口。验证证据仅限 macOS 网页端 0.1.5-rc.2 的隔离数据目录，未做模型任务与 Windows/Desktop 验收。
 
 ## 0.5.1 改动与验证边界
 

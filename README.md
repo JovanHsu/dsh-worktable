@@ -4,11 +4,13 @@
 
 **An agent-project workbench for DeepSeek Harness** — a sidebar app drawer that turns every project into dockable windows, plus a built-in control room that watches them all in real time.
 
-> **This is a DSH 0.1.5-rc.2 compatibility fork (0.5.2)** of [Aisland-SJL/dsh-worktable](https://github.com/Aisland-SJL/dsh-worktable) v0.5.1. The compatibility declaration only claims `0.1.5-rc.2`; the four changes and the verified scope are in the [package notes](01_content/README.md#本分支dsh-015-rc2-兼容分支052). Install:
+> **This is a DSH 0.1.5-rc.2 compatibility fork (0.5.3)** of [Aisland-SJL/dsh-worktable](https://github.com/Aisland-SJL/dsh-worktable) v0.5.1. The compatibility declaration only claims `0.1.5-rc.2`; the compatibility changes, the control-room page entries and the verified scope are in the [package notes](01_content/README.md#本分支dsh-015-rc2-兼容分支053). Install:
 >
 > ```bash
 > dsh plugin --profile web add "https://github.com/JovanHsu/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
 > ```
+>
+> This branch also adds **control-room page entries**: a card per local `.html` file or `https://` URL that opens the page in a pane.
 >
 > The 0.5.1 compatibility matrix and acceptance records below are upstream history, not this branch's verified scope.
 
