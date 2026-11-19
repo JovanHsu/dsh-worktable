@@ -304,7 +304,7 @@ function testConsolePresentation() {
 }
 
 async function testUpdatePresentation() {
-  const releaseUrl = 'https://api.github.com/repos/Aisland-SJL/dsh-worktable/releases/latest'
+  const releaseUrl = 'https://api.github.com/repos/JovanHsu/dsh-worktable/releases/latest'
   for (const outcome of ['older', 'same', 'forbidden', 'invalid', 'invalid-prefix', 'skip']) {
     let response = { status: 200, tag: 'v9.0.0' }
     let requests = 0

@@ -22,7 +22,7 @@ function fixture(reply = { tag_name: 'v0.5.0' }) {
   })
   return { api: module.exports, values, calls, localStorage, respond: value => { response = value } }
 }
-const info = latest => ({ latest, notes: 'Release notes', url: 'https://github.com/Aisland-SJL/dsh-worktable/releases/tag/v' + latest })
+const info = latest => ({ latest, notes: 'Release notes', url: 'https://github.com/JovanHsu/dsh-worktable/releases/tag/v' + latest })
 const { cmpVer } = fixture().api
 
 test('version precedence covers old release, candidate, stable, numeric prerelease and build metadata', () => {
