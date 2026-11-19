@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { test, after, afterEach } from 'node:test'
 import { createRequire } from 'node:module'
-import { mkdtempSync, writeFileSync, mkdirSync, rmSync, symlinkSync, renameSync, truncateSync, unlinkSync } from 'node:fs'
+import { mkdtempSync, writeFileSync, mkdirSync, rmSync, symlinkSync, renameSync, truncateSync, unlinkSync, realpathSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import { pathToFileURL, fileURLToPath } from 'node:url'
@@ -34,12 +34,13 @@ const root=join(temp,'root'),outside=join(temp,'outside');mkdirSync(root);mkdirS
 writeFileSync(join(root,'index.html'),'fixture');writeFileSync(join(outside,'outside.txt'),'outside')
 test('Preview reads only its canonical root, including directory indexes',async()=>{
   const store=createPreviewFiles(),token=await store.mount(root)
-  assert.equal((await store.file(token,[])).path,join(root,'index.html'))
+  // mount() canonicalizes; macOS tmpdir lives behind the /var → /private/var symlink.
+  assert.equal((await store.file(token,[])).path,join(realpathSync(root),'index.html'))
   assert.equal(await store.file('invented-token',['index.html']),null)
   for(const parts of [['..','outside','outside.txt'],['..\\outside\\outside.txt'],['/outside'],['bad\0']]) assert.equal(await store.file(token,parts),null)
   symlinkSync(outside,join(root,'escape'),process.platform==='win32'?'junction':'dir')
   assert.equal(await store.file(token,['escape','outside.txt']),null)
-  rmSync(join(root,'escape'))
+  rmSync(join(root,'escape'),{recursive:true,force:true})
 })
 test('Capabilities expire after idle time; revocation and disposal remove them',async()=>{
   let now=0;const store=createPreviewFiles(()=>now),a=await store.mount(root)

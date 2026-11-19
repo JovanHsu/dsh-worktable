@@ -21,6 +21,12 @@ async function requestRejection(ctx, req) {
       if (peer && peer === connection.operator && peer.principal === void 0) return void 0;
       return 403;
     }
+    if (typeof connection.requestRejection === "function") {
+      const rejection = connection.requestRejection({ headers: req?.headers ?? {} });
+      if (rejection === 401 || rejection === 403) return rejection;
+      if (rejection === void 0 || rejection === null) return void 0;
+      return 403;
+    }
   } catch {
   }
   return 503;
@@ -225,7 +231,7 @@ function resolveDshHomeSafe() {
   cachedDshHome = baseDshHome();
   return cachedDshHome;
 }
-var PLUGIN_VERSION = false ? "dev" : "0.5.1";
+var PLUGIN_VERSION = false ? "dev" : "0.5.2";
 var name = "dsh-worktable";
 var inject = ["webServer", "sessions"];
 var HEALTH_PATH = "/api/worktable/health";

@@ -62,10 +62,26 @@ test('Every private HTTP route rejects unauthenticated requests before reading a
   } finally { h.close() }
 })
 test('Missing auth, exceptions, malformed admissions and non-owner API peers fail closed', async () => {
-  for (const [connection,status] of [[undefined,503],[{requestRejection:()=>undefined},503],[{admit(){throw Error('unavailable')}},503],[{admit:()=>null},503],[{admit:()=>({})},403],[{admit:()=>({peer:{principal:{kind:'agent'}}})},403]]) {
+  for (const [connection,status] of [[undefined,503],[{requestRejection(){throw Error('unavailable')}},503],[{requestRejection:()=>418},403],[{admit(){throw Error('unavailable')}},503],[{admit:()=>null},503],[{admit:()=>({})},403],[{admit:()=>({peer:{principal:{kind:'agent'}}})},403]]) {
     const h=harness({current:connection})
     try { assert.equal((await invoke(h.routes.get('/api/worktable/write'),{})).status,status) } finally { h.close() }
   }
+})
+test('0.1.x Host handles fence through their own synchronous Host/Origin + browser-token check', async () => {
+  // DSH 0.1.x exposes no admit()/peer; requestRejection is the host's own /api fence.
+  for (const [connection,status] of [[{requestRejection:()=>undefined},400],[{requestRejection:()=>401},401],[{requestRejection:()=>403},403]]) {
+    const h=harness({current:connection})
+    try {
+      const r=await invoke(h.routes.get('/api/worktable/write'),{})
+      assert.equal(r.status,status)
+      // A rejected request must not read its body; an admitted one proceeds to validation.
+      if (status!==400) assert.equal(r.consumed,false)
+    } finally { h.close() }
+  }
+  // 0.2 admit() wins when both exist, so a 0.2 host never downgrades to the narrow check.
+  const dual={admit:()=>({rejection:401}),requestRejection:()=>undefined}
+  const h=harness({current:dual})
+  try { assert.equal((await invoke(h.routes.get('/api/worktable/write'),{})).status,401) } finally { h.close() }
 })
 test('An admitted owner writes normally; revocation is checked on the next request', async () => {
   const connection={current:{admit:()=>({peer:owner})}}

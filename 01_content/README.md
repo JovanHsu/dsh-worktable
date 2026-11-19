@@ -2,6 +2,25 @@
 
 > DeepSeek Harness 侧边栏的 agent 级项目容器（应用抽屉）。纯增量插件，不替换、不禁用任何官方插件。
 
+## 本分支：DSH 0.1.5-rc.2 兼容分支（0.5.2）
+
+上游基线是 [Aisland-SJL/dsh-worktable](https://github.com/Aisland-SJL/dsh-worktable) v0.5.1（声明支持 DSH 0.2.0-rc.2 / 0.2.1-rc.3 / 0.2.1-rc.5）。本分支把它回接到 **DSH 0.1.5-rc.2** 的宿主契约，版本号 0.5.2，兼容声明只写 `0.1.5-rc.2`。
+
+改动只有四处，不新增功能：
+
+1. **接口鉴权（`src/requestAuth.ts`）**：0.1.5 的 `ctx.connection` 没有 `admit()`/peer 模型。新增分支：在没有 `admit` 时调用宿主自己的 `connection.requestRejection({ headers })`，即宿主 `/api` 同款 Host/Origin + 浏览器 token 校验；401/403 拒绝，`undefined` 放行，其余或服务缺失仍返回 503。有 `admit` 的 0.2 宿主不受影响（优先走 `admit`）。
+2. **控制室摘要（`src/client/sessionDetails.ts`）**：0.1.x 没有 `sessions.using` 临时持有，也没有 `face.history()`。改为优先读该会话 binding 的 `eventSource` 事件窗口（新旧宿主都有），取不到再回退原路径。
+3. **声明（`package.json` / `dsh.plugin.json`）**：`engines.dsh`、`dsh.compatibility`、`dshReleases` 与版本号统一到 0.5.2 / `0.1.5-rc.2`。
+4. **测试夹具（`04_test/*`）**：两处 macOS 平台修正（`/var` → `/private/var` 真实路径断言、目录符号链接递归删除），以及新增「0.1.x 同步 fence」用例；`npm run test:security` 23 项全绿。
+
+### 已验证范围（macOS + dsh web 0.1.5-rc.2，隔离 `DSH_HOME`）
+
+加载：宿主插件与客户端模块进入启动载荷，`style[data-dsh-plugin="dsh-worktable"]` 注入，侧边栏「≡ 工作台 … 🖥️ 控制室」区块渲染，reload 无未捕获错误、项目与布局持久化。
+接口：`/api/worktable/health` 公开 200；私有路由与 WS 升级无令牌 401（此前会因缺 `admit` 全部 503）；带令牌的资源管理器真实列出磁盘目录；终端窗跑起真实 zsh（`node-pty` + `ws` + 升级鉴权）。
+界面：控制室首次绑定、卡片网格与背景、分栏浮层（`shell.overlay`）、选择布局预设建项目（田字格 4 窗格）、分栏退出、设置弹层与更新检查、添加项目面板（含原生目录选择等待态）。
+
+未验证、不作声明：模型任务（隔离环境无 API Key，因此没有真实助手摘要）、审批/子代理、Windows 与 Desktop、上游 GitHub Release 更新链路（本机检查失败，插件按失败上报，未误报最新）。重启正式 `dsh web` 由用户执行，本分支不自动重启宿主。
+
 ## 是什么
 
 - **侧边栏「工作台」区块**：收纳用户自建项目与入驻插件项目，支持改名/图标/排序/显示隐藏、项目 × 对话绑定、项目文件夹。

@@ -13,6 +13,15 @@ export async function requestRejection(ctx: any, req: any): Promise<number | und
       if (peer && peer === connection.operator && peer.principal === undefined) return undefined
       return 403
     }
+    // DSH 0.1.x has no per-request peer: the same Host/Origin + browser-token fence the
+    // host applies to its own /api routes is exposed synchronously instead. Only an
+    // explicit 401/403 rejects; an unusable answer still falls through to 503.
+    if (typeof connection.requestRejection === 'function') {
+      const rejection = connection.requestRejection({ headers: req?.headers ?? {} })
+      if (rejection === 401 || rejection === 403) return rejection
+      if (rejection === undefined || rejection === null) return undefined
+      return 403
+    }
   } catch {}
   // An unavailable or failed security service must not turn into public filesystem access.
   return 503

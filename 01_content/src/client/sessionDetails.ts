@@ -48,7 +48,12 @@ export async function readSessionPreview(sessions: any, id: string): Promise<str
       return previewFromEvents(binding.eventSource?.getSnapshot?.()?.entries)
     })
   }
-  const face = sessions?.binding?.(id)?.session
+  // 0.1.x has no temporary retention and no face.history(); the listed binding's
+  // contiguous event window is the read-only mirror the host already keeps.
+  const binding = sessions?.binding?.(id)
+  const fromWindow = previewFromEvents(binding?.eventSource?.getSnapshot?.()?.entries)
+  if (fromWindow) return fromWindow
+  const face = binding?.session
   if (typeof face?.history !== 'function') return ''
   const result = await face.history({ maxMessages: 6 })
   return previewFromEvents(result?.result?.value?.events)
