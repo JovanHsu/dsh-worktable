@@ -4,7 +4,15 @@
 
 **DeepSeek Harness 的 agent 项目工作台**——侧边栏「应用抽屉」把每个项目变成可停靠的窗口，再加一个实时监控所有项目的内置「控制室」。
 
-> 当前源码版本 **0.5.1**：精确增加 DSH **0.2.1-rc.5** 兼容，中性显示本轮结束状态与助手答复摘要，修复测试版版本比较和旧缓存造成的降级更新误报。公开发布状态以 [GitHub Releases](https://github.com/Aisland-SJL/dsh-worktable/releases) 为准。保留既有安全隔离与鉴权，不包含旧会话 HTTP 400 的宿主修复。
+> **这是面向 DSH 0.1.5-rc.2 的兼容分支（0.5.2）**，fork 自 [Aisland-SJL/dsh-worktable](https://github.com/Aisland-SJL/dsh-worktable) v0.5.1。兼容声明只写 `0.1.5-rc.2`，改动与已验证范围见 [包内说明](01_content/README.md#本分支dsh-015-rc2-兼容分支052)。安装：
+>
+> ```bash
+> dsh plugin --profile web add "https://github.com/JovanHsu/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
+> ```
+>
+> 下文 0.5.1 的兼容矩阵与验收记录属上游历史，不代表本分支的验证范围。
+
+> 当前源码版本 **0.5.1**：精确增加 DSH **0.2.1-rc.5** 兼容，中性显示本轮结束状态与助手答复摘要，修复测试版版本比较和旧缓存造成的降级更新误报。公开发布状态以 [GitHub Releases](https://github.com/JovanHsu/dsh-worktable/releases) 为准。保留既有安全隔离与鉴权，不包含旧会话 HTTP 400 的宿主修复。
 
 > 兼容声明仅覆盖 Windows 下已测的 **DSH 0.2.0-rc.2 / 0.2.1-rc.3 / 0.2.1-rc.5**，各环境的验证范围不同。用户已确认安装 0.5.1-dev.3 后降级更新误报消失、页面看起来正常；这与前轮候选 GUI 检查均不能外推为正式包全功能桌面验收。0.1.x 不在本版支持范围。0.5.1 保留 0.5.0 引入的接口身份校验、网页隔离、预览读取限制和布局修复。浏览器存储、登录、WebGL 贴图及标注自动取字可能受隔离影响，证据与边界见 [兼容与安全说明](docs/compatibility-and-security.md)。
 
@@ -64,13 +72,13 @@
    **A · 一行命令（推荐）** —— 直接安装 GitHub Release 的安装包，无需 Git：
 
    ```bash
-   dsh plugin --profile web add "https://github.com/Aisland-SJL/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
+   dsh plugin --profile web add "https://github.com/JovanHsu/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
    ```
 
    **B · 本地克隆（想改源码用）** —— `link:` 只接受本地绝对路径（路径不要带空格）：
 
    ```bash
-   git clone https://github.com/Aisland-SJL/dsh-worktable.git
+   git clone https://github.com/JovanHsu/dsh-worktable.git
    dsh plugin --profile web add "link:<克隆出来的 dsh-worktable 仓库目录的绝对路径>/01_content"
    # 例：克隆到 D:\tools 后 → dsh plugin --profile web add "link:D:/tools/dsh-worktable/01_content"
    ```
@@ -85,7 +93,7 @@
 先保存任务，从应用菜单/托盘完整退出（只关窗口不够）；将安装目录占位符替换为实际位置，在 PowerShell 执行，再手动重新打开：
 
 ```powershell
-& "<桌面端安装目录>\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add "https://github.com/Aisland-SJL/dsh-worktable/releases/download/v0.5.1/dsh-worktable-0.5.1.tgz"
+& "<桌面端安装目录>\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add "https://github.com/JovanHsu/dsh-worktable/releases/download/v0.5.1/dsh-worktable-0.5.1.tgz"
 ```
 
 必须使用桌面端自带 CLI 与 `desktop` profile，不用不固定版本的 npx 或网页 CLI 代替。保留实际 DSH_HOME；即便共用会话数据目录，网页与桌面来源的项目/布局/媒体也不会自动同步。
@@ -139,7 +147,7 @@ node --check lib/index.js
 - 网页端可重跑安装命令（安装最新已发布版本），装完重启 dsh web 并刷新；桌面用户须用上方桌面安装步骤：
 
   ```bash
-  dsh plugin --profile web add "https://github.com/Aisland-SJL/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
+  dsh plugin --profile web add "https://github.com/JovanHsu/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
   ```
 
 **情况 B：Harness 本身挂了**（服务起不来 / 报 Failed to load plugins）

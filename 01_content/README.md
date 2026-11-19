@@ -102,11 +102,11 @@
 
 方式 A（推荐，无需 Git）——直接安装 GitHub Release 的最新安装包：
 
-    dsh plugin --profile web add "https://github.com/Aisland-SJL/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
+    dsh plugin --profile web add "https://github.com/JovanHsu/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
 
 方式 B（想改源码用）——克隆仓库后用本地路径注册（`link:` 只接受本地路径，不要带空格）：
 
-    git clone https://github.com/Aisland-SJL/dsh-worktable.git
+    git clone https://github.com/JovanHsu/dsh-worktable.git
     dsh plugin --profile web add "link:<克隆出来的 dsh-worktable 仓库目录的绝对路径>/01_content"
 
 两种方式 `add` 都会把 `dsh-worktable` 注册进 profile 的 bundle 列表（写入 `~/.dsh`），装完重启 dsh web、刷新界面生效。
@@ -115,7 +115,7 @@
 
 先保存任务，从应用菜单/托盘完整退出（只关窗口不够）；将占位路径替换为实际桌面端安装目录，在 PowerShell 执行，再手动重新打开应用：
 
-    & "<桌面端安装目录>\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add "https://github.com/Aisland-SJL/dsh-worktable/releases/download/v0.5.1/dsh-worktable-0.5.1.tgz"
+    & "<桌面端安装目录>\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add "https://github.com/JovanHsu/dsh-worktable/releases/download/v0.5.1/dsh-worktable-0.5.1.tgz"
 
 不要以不固定版本的 npx 或网页端 CLI 代替桌面端自带 CLI；保留实际 DSH_HOME，勿把测试数据目录覆盖正式数据。新建控制室管理对话时，DSH 0.2 用户请选择分组，或直接绑定可用的现有对话。
 
@@ -133,9 +133,9 @@
 
 ## 相关文档
 
-- 项目规则：https://github.com/Aisland-SJL/dsh-worktable/blob/main/AGENTS.md
-- 需求与协议：https://github.com/Aisland-SJL/dsh-worktable/blob/main/02_process/PRD.md
-- 工作日志：https://github.com/Aisland-SJL/dsh-worktable/tree/main/02_process/worklogs
+- 项目规则：https://github.com/JovanHsu/dsh-worktable/blob/main/AGENTS.md
+- 需求与协议：https://github.com/JovanHsu/dsh-worktable/blob/main/02_process/PRD.md
+- 工作日志：https://github.com/JovanHsu/dsh-worktable/tree/main/02_process/worklogs
 
 ## License
 

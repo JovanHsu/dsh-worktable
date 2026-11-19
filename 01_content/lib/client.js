@@ -8930,7 +8930,7 @@ function hostPreviewUrl(path, surface = {
 }
 function worktableUpgrade(protocol = typeof location === "undefined" ? "http:" : location.protocol) {
   const desktop = protocol === "dsh-app:";
-  const command = "dsh plugin --profile " + (desktop ? "desktop" : "web") + ' add "https://github.com/Aisland-SJL/dsh-worktable/releases/latest/download/dsh-worktable.tgz"';
+  const command = "dsh plugin --profile " + (desktop ? "desktop" : "web") + ' add "https://github.com/JovanHsu/dsh-worktable/releases/latest/download/dsh-worktable.tgz"';
   const prompt = desktop ? "\u5E2E\u6211\u5347\u7EA7 dsh-worktable\u3002\u6211\u5F53\u524D\u4F7F\u7528\u5B98\u65B9\u684C\u9762\u7AEF\uFF1A\u5148\u5B9A\u4F4D\u8BE5\u684C\u9762\u7AEF\u81EA\u5E26\u7684 dsh CLI \u5E76\u51C6\u5907\u66F4\u65B0\uFF0C\u518D\u63D0\u9192\u6211\u5B8C\u6574\u9000\u51FA\u684C\u9762\u7AEF\u3002\u786E\u8BA4\u9000\u51FA\u540E\u4F7F\u7528\u8BE5 CLI \u6267\u884C " + command + "\u3002\u4E0D\u8981\u4F7F\u7528\u7F51\u9875\u7AEF CLI\uFF0C\u4E0D\u8981\u4FEE\u6539 web profile\uFF0C\u4E0D\u8981\u81EA\u52A8\u6740\u8FDB\u7A0B\u6216\u91CD\u542F\uFF1B\u5B8C\u6210\u540E\u63D0\u9192\u6211\u624B\u52A8\u91CD\u65B0\u6253\u5F00\u684C\u9762\u7AEF\u3002" : "\u5E2E\u6211\u5347\u7EA7 dsh-worktable\uFF1A\u6267\u884C " + command + "\uFF0C\u5B8C\u6210\u540E\u63D0\u9192\u6211\u91CD\u542F dsh web \u5E76\u5237\u65B0\u9875\u9762";
   return { command, prompt, desktop };
 }
@@ -9161,7 +9161,7 @@ var CHANGELOG_V030 = `\u66F4\u65B0\u516C\u544A \xB7 v0.5.1
 
 // src/client/updateCheck.ts
 var LOCAL_VERSION = false ? "dev" : "0.5.2";
-var UPDATE_REPO = "Aisland-SJL/dsh-worktable";
+var UPDATE_REPO = "JovanHsu/dsh-worktable";
 var K_UPDATE_CHECK = "dsh.worktable.updateCheck.v1";
 var K_LAST_CHECK = "dsh.worktable.lastUpdateCheck.v1";
 var K_SKIP = "dsh.worktable.skipVersion.v1";
@@ -20738,7 +20738,7 @@ var WAVE_BG_B64 = "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAYEBQUFBAYFBQUHBgYHCQ8KCQgIC
 
 // src/client/index.tsx
 var import_jsx_runtime3 = require("react/jsx-runtime");
-var UPDATE_REPO2 = "Aisland-SJL/dsh-worktable";
+var UPDATE_REPO2 = "JovanHsu/dsh-worktable";
 var { command: UPGRADE_CMD, prompt: UPGRADE_AI2, desktop: DESKTOP_HOST } = worktableUpgrade();
 var ICON_SYNC = /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("svg", { viewBox: "0 0 16 16", "aria-hidden": true, children: [
   /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("path", { fill: "none", stroke: "currentColor", strokeWidth: "1.6", strokeLinecap: "round", strokeLinejoin: "round", d: "M1.5 8a6.5 6.5 0 0 1 11.1-4.6L14.5 5" }),

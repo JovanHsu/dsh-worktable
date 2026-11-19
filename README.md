@@ -4,7 +4,15 @@
 
 **An agent-project workbench for DeepSeek Harness** — a sidebar app drawer that turns every project into dockable windows, plus a built-in control room that watches them all in real time.
 
-> Source version **0.5.1** adds exact DSH **0.2.1-rc.5** compatibility, neutral run-ended status and assistant-only previews, and fixes downgrade alerts caused by prerelease comparison and stale update caches. Publication status follows [GitHub Releases](https://github.com/Aisland-SJL/dsh-worktable/releases). Existing sandbox/authentication boundaries remain; this is not a fix for the separate old-session HTTP 400 issue.
+> **This is a DSH 0.1.5-rc.2 compatibility fork (0.5.2)** of [Aisland-SJL/dsh-worktable](https://github.com/Aisland-SJL/dsh-worktable) v0.5.1. The compatibility declaration only claims `0.1.5-rc.2`; the four changes and the verified scope are in the [package notes](01_content/README.md#本分支dsh-015-rc2-兼容分支052). Install:
+>
+> ```bash
+> dsh plugin --profile web add "https://github.com/JovanHsu/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
+> ```
+>
+> The 0.5.1 compatibility matrix and acceptance records below are upstream history, not this branch's verified scope.
+
+> Source version **0.5.1** adds exact DSH **0.2.1-rc.5** compatibility, neutral run-ended status and assistant-only previews, and fixes downgrade alerts caused by prerelease comparison and stale update caches. Publication status follows [GitHub Releases](https://github.com/JovanHsu/dsh-worktable/releases). Existing sandbox/authentication boundaries remain; this is not a fix for the separate old-session HTTP 400 issue.
 
 > Compatibility is limited to the tested DSH versions **0.2.0-rc.2 / 0.2.1-rc.3 / 0.2.1-rc.5** on Windows; coverage varies by environment. The user confirmed that the downgrade alert disappeared and the page looked normal after installing 0.5.1-dev.3. This confirmation and earlier candidate GUI checks do not establish full final-package Desktop acceptance. DSH 0.1.x is outside this release’s support range. Version 0.5.1 retains the identity checks, page isolation, preview limits and layout fixes introduced in 0.5.0. Embedded storage, login, WebGL textures and automatic annotation text extraction can be affected. See [compatibility and security](docs/compatibility-and-security.md) for evidence and limits.
 
@@ -64,13 +72,13 @@ The current compatibility declaration lists only DSH **0.2.0-rc.2 / 0.2.1-rc.3 /
    **A · one-liner (recommended)** — straight from the GitHub Release tarball, no Git needed:
 
    ```bash
-   dsh plugin --profile web add "https://github.com/Aisland-SJL/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
+   dsh plugin --profile web add "https://github.com/JovanHsu/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
    ```
 
    **B · local clone (for hacking on the source)** — `link:` accepts a local absolute path only (no spaces in the path):
 
    ```bash
-   git clone https://github.com/Aisland-SJL/dsh-worktable.git
+   git clone https://github.com/JovanHsu/dsh-worktable.git
    dsh plugin --profile web add "link:<absolute path of the cloned dsh-worktable directory>/01_content"
    # e.g. cloned into D:\tools → dsh plugin --profile web add "link:D:/tools/dsh-worktable/01_content"
    ```
@@ -85,7 +93,7 @@ The current compatibility declaration lists only DSH **0.2.0-rc.2 / 0.2.1-rc.3 /
 Save your tasks, fully exit the app from its menu/tray (closing the window is not enough), replace the installation-directory placeholder, run in PowerShell, then reopen the app manually:
 
 ```powershell
-& "<Desktop installation directory>\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add "https://github.com/Aisland-SJL/dsh-worktable/releases/download/v0.5.1/dsh-worktable-0.5.1.tgz"
+& "<Desktop installation directory>\resources\runtime\cli\bin\dsh.cmd" plugin --profile desktop add "https://github.com/JovanHsu/dsh-worktable/releases/download/v0.5.1/dsh-worktable-0.5.1.tgz"
 ```
 
 Use the Desktop-bundled CLI and `desktop` profile, not an unpinned npx or Web CLI. Preserve the actual DSH_HOME. Browser-local projects/layouts/media do not automatically sync between Web and Desktop origins, even when sessions share one data home.
@@ -138,7 +146,7 @@ Projects, bindings and layouts live in browser localStorage; media lives in Inde
 - For Web, re-run the install command (installs the latest published release), then restart dsh web and refresh. Desktop users must follow the Desktop instructions above:
 
   ```bash
-  dsh plugin --profile web add "https://github.com/Aisland-SJL/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
+  dsh plugin --profile web add "https://github.com/JovanHsu/dsh-worktable/releases/latest/download/dsh-worktable.tgz"
   ```
 
 **Case B: Harness itself is down** (service fails to start / "Failed to load plugins")

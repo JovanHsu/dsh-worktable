@@ -30,7 +30,7 @@ type OrderBy = 'manual' | 'recent'
 type DockMode = 'footer' | 'float'
 
 // ── 更新检查（客户端直连 GitHub Releases API，只读 GET；失败静默）──
-const UPDATE_REPO = 'Aisland-SJL/dsh-worktable'
+const UPDATE_REPO = 'JovanHsu/dsh-worktable'
 const { command: UPGRADE_CMD, prompt: UPGRADE_AI, desktop: DESKTOP_HOST } = worktableUpgrade()
 // 更新提示图标（手绘 SVG，避免 emoji 跨平台渲染差异）
 const ICON_SYNC = (
